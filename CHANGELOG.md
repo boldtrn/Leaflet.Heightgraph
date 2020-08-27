@@ -1,6 +1,79 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v1.3.2 (2020-07-31)
+
+**Changed**
+- module field path in package.json
+
+## v1.3.1 (2020-07-30)
+
+**Fixed**
+- using margin width and height in tick and grid generation ([#87](https://github.com/GIScience/Leaflet.Heightgraph/issues/87))
+
+## v1.3.0 (2020-07-30)
+
+**Changed**
+- calculation of elevation bounds to a simpler method
+- README.md height graph image
+
+**Fixed**
+- resize() resets chosen category ([#97](https://github.com/GIScience/Leaflet.Heightgraph/issues/97))
+- overlapping axis ticks for small heightgraph size ([#87](https://github.com/GIScience/Leaflet.Heightgraph/issues/87))
+
+## v1.2.0 (2020-07-25)
+
+**Added**
+- click option to legend to keep it open
+
+**Fixed**
+- hg.addData toggles expand/minimize ([#94](https://github.com/GIScience/Leaflet.Heightgraph/issues/94))
+- resizing with less than 2 parameters crops height graph ([#93](https://github.com/GIScience/Leaflet.Heightgraph/issues/93))
+- graphStyle not adjusting legend items([#89](https://github.com/GIScience/Leaflet.Heightgraph/issues/89))
+- zooming out when changing category ([#90](https://github.com/GIScience/Leaflet.Heightgraph/issues/90))
+- disappearing category selection arrows on resize ([#92](https://github.com/GIScience/Leaflet.Heightgraph/issues/92))
+
+**Security**
+- update dependencies
+- `npm audit fix` lodash issues
+
+## v1.1.0 (2020-07-05)
+
+**Added**
+- `graphStyle` option to customize the graph style ([PR #85](https://github.com/GIScience/Leaflet.Heightgraph/pull/85))
+- `expandControls` option to hide the close button and expand by default ([PR #82](https://github.com/GIScience/Leaflet.Heightgraph/pull/82))
+- `resize` method for dynamic resizing of the heightgraph ([#78](https://github.com/GIScience/Leaflet.Heightgraph/issues/78))
+- `mapMousemoveHandler` method for handling a mousemove event to show the graph- and optionally the map-marker ([PR #82](https://github.com/GIScience/Leaflet.Heightgraph/pull/82))
+- `mapMouseoutHandler` method for handling the mouseout event, removing the markers ([PR #82](https://github.com/GIScience/Leaflet.Heightgraph/pull/82))
+
+**Changed**
+- `addData` method functionality ([#37](https://github.com/GIScience/Leaflet.Heightgraph/issues/37)):
+    - instead of removing and adding the whole height graph only the data
+    is cleared and replaced, keeping the L.control.heightgraph instance
+    - mappings for subsequent data sets need to be specified during
+    initialization of the height graph
+- dependencies to latest ([#83](https://github.com/GIScience/Leaflet.Heightgraph/issues/83))
+- prefixed class names ([#65](https://github.com/GIScience/Leaflet.Heightgraph/issues/65))
+
+**Removed**
+- unused dependencies: bower, concurrently & connect-modrewrite
+
+## v1.0.0 (2020-06-26)
+
+**Added**
+- rollup for building and bundling d3 ([#45](https://github.com/GIScience/Leaflet.Heightgraph/issues/45))
+- modularization
+- `es-dev-server` (replaces lite-server) for development
+
+**Changed**
+- folder structure
+
+**Removed**
+- removed d3 dependency
+- grunt as task runner
+- unused dev-dependencies
+- lite-server
+
 ## v0.4.1 (2019-11-15)
 
 **Added**

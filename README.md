@@ -4,7 +4,7 @@ This plugin is inspired by [MrMufflon/Leaflet.Elevation](https://github.com/MrMu
 You may use this plugin to view an interactive height profile of linestring segments using d3js.
 The input data may consist of different types of attributes you wish to display.
 
-![preview](https://cloud.githubusercontent.com/assets/10322094/22474104/472bcc88-e7db-11e6-8c9e-7e1d53cd0b57.png)
+![height_graph](https://user-images.githubusercontent.com/23240110/88930276-8efd5980-d27b-11ea-9b85-f6a864417f38.png)
 
 Supported Browsers:
 - Chrome
@@ -23,42 +23,41 @@ Install Leaflet.Heightgraph and dependencies with npm.
 npm install leaflet.heightgraph
 ```
 
-When using NPM you can require all needed libraries like this.
-```
-require('d3');
-require('leaflet');
-require('leaflet.heightgraph');
-```
+## Import
 
-Alternatively you can add the required libraries in the head of your index.html file
+You can import the required libraries in the head of your index.html file
 ```html
  <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
  <script src="node_modules/leaflet/dist/leaflet.js"></script>
  <link rel="stylesheet" href="src/L.Control.Heightgraph.css"/>
- <script src="node_modules/d3/dist/d3.js"></script>
  <script type="text/javascript" src="src/L.Control.Heightgraph.js"></script>
 ```
 
-The latest version of d3 is not compatible with older browsers, you can try d3 v4 in this case.
+When using NPM you can require all needed libraries like this.
+```
+require('leaflet');
+require('leaflet.heightgraph');
+```
 
-## Local setup
+After importing Leaflet correctly, ES 6 Module import is possible as well:
+```html
+<script type="module">
+    import 'leaflet.heightgraph'
+</script>
+```
 
-```bash
-# clone the repository
-$ git clone https://github.com/GIScience/Leaflet.Heightgraph.git
-
-# install dependencies using a node-version >= 8
-$ npm install
-
-# run jasmine tests with
-$ grunt
+The stylesheet can alternatively be imported in a style tag:
+```html
+<style>
+    @import "../node_modules/leaflet.heightgraph/dist/L.Control.Heightgraph.min.css";
+</style>
 ```
 
 ## Usage
 Initialize the heightgraph, add it to your Leaflet map object and add your
 Data to the heightgraph object.
 ```javascript
-var hg = L.control.heightgraph();
+let hg = L.control.heightgraph();
 hg.addTo(map);
 hg.addData(geojson);
 L.geoJson(geojson).addTo(map);
@@ -79,7 +78,7 @@ Notice that the list of coordinates has to start with the last coordinate
 of the previous `LineString`.
 
 ```javascript
-var FeatureCollections = [{
+const FeatureCollections = [{
     "type": "FeatureCollection",
     "features": [{
         "type": "Feature",
@@ -222,6 +221,22 @@ highlightStyle = {
  }
 ```
 
+### graphStyle
+Allows customizing the style of the height graph.
+You may specify the [<path> element presentation attributes](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path) in the form of a JavaScript object.
+Note that in case of conflict the `mappings` attributes take precedence over the `graphStyle` attributes.
+
+default: `graphStyle: {}`
+
+Example:
+```javascript
+graphStyle: {
+    opacity: 0.8,
+    'fill-opacity': 0.5,
+    'stroke-width': '2px'
+};
+```
+
 ### translation
 You can change the labels of the heightgraph info field by passing translations
 for `distance`, `elevation`, `segment_length`, `type` and `legend`.
@@ -238,31 +253,87 @@ translation: {
 ```
 
 ### xTicks
-Specify the tick frequency in the *x axis* of the graph. Corresponds approximately to 
+Overwrite automatic tick handling for x axis and specify the tick frequency in the *x axis* of the graph. Corresponds approximately to 
 2 to the power of `value` ticks.
 
 default: `xTicks: 3`
 
 ### yTicks
-Specify the tick frequency in the *y axis* of the graph. Corresponds approximately to 
+Overwrite automatic tick handling for y axis and specify the tick frequency in the *y axis* of the graph. Corresponds approximately to 
 2 to the power of `value` ticks.
 
 default: `yTicks: 3`
 
-## Debug configurations (WebStorm)
+## Methods
+The following methods are available on a created `L.control.heightgraph` instance,
+represented by `hg` in the examples.
+
+### mapMousemoveHandler
+Used together with mapMouseoutHandler.
+Takes a mousemove event as input `hg.mapMousemoveHandler(event)` to show
+the current position on the heightgraph when hovering over the respective
+geometry on the map.
+The marker on the map can be disabled by passing an object with properties
+`showMapMarker:false` as second argument. `showMapMarker` is `true` by default.
+```js
+hg.mapMousemoveHandler(mousemoveEvent, {showMapMarker: false})
+```
+Check [example.js](/example/example.js) for an implementation example.
+
+
+### mapMouseoutHandler
+Used together with mapMousemoveHandler.
+Responsible for removing the created markers again.
+You can pass a timeout in milliseconds to delay the removal.
+The default timeout is `1000`.
+```js
+hg.mapMouseoutHandler(0)
+```
+Check [example.js](/example/example.js) for an implementation example.
+
+### resize
+Use this to resize the heightgraph container including the graph to the
+specified extent by passing an object including defined `width` and `height`
+properties in pixel values:
+```js
+hg.resize({width: 1000, height: 300})
+```
+
+## Development setup
+
+```bash
+# clone the repository
+$ git clone https://github.com/GIScience/Leaflet.Heightgraph.git
+
+# install dependencies using a node-version >= 8
+$ npm install
+
+# start development server
+$ npm start
+```
+
+## Configurations (WebStorm)
+
+You can create run configurations for different tasks:
+
+### Starting development server
+
+- open `Run -> Edit Configurations...`
+- click `+` to add a new configuration and choose the npm template
+- give the Configuration a name e.g. `Dev`
+- choose `start` as command
+- press `OK`
+
+### Testing
 
 Debug jasmine tests with karma in WebStorm
 
 - open `Run -> Edit Configurations...`
 - click `+` to add a new configuration and choose the karma template
 - give the Configuration a name e.g. `Test`
-- the other parameters should be filled correctly by default
-    - Configuration File: `{path to repository root}/karma.conf.js`
-    - Node interpreter: `{path to node interpreter}`
-    - Karma package: `{path to repository root}/node_modules/karma`
-    - Working directory: `{path to repository root}`
-    - Browsers to start / Node Options / Environment Variables: - leave empty -
-- click the run button or setup breakpoints and click the debug button
+- press `OK`
+
+### Coverage
 
 Run karma with coverage
 
